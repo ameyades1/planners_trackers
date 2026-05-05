@@ -1,0 +1,4 @@
+.playwright-mcp/
+.claude/
+*.png
+.DS_Store

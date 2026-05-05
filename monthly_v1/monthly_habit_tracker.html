@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Habit Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            color: #333;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* Header */
+        .header {
+            background: #f4d76a;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            border-bottom: 3px solid #333;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .month-field {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .month-field label {
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .month-field input {
+            border: none;
+            border-bottom: 1px solid #333;
+            padding: 4px 8px;
+            font-size: 13px;
+            width: 150px;
+            background: transparent;
+        }
+
+        /* Main content */
+        .content {
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        /* Tracker wrapper */
+        .tracker-wrapper {
+            overflow-x: auto;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .tracker {
+            display: grid;
+            grid-template-columns: 1fr repeat(31, 26px);
+            gap: 0;
+            min-width: max-content;
+            background: white;
+        }
+
+        /* Habit label header */
+        .habit-label {
+            position: sticky;
+            left: 0;
+            background: #f0f0f0;
+            border-right: 2px solid #333;
+            border-bottom: 2px solid #333;
+            padding: 8px 4px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 11px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Day headers */
+        .day-header {
+            background: #fff9e6;
+            border-right: 1px solid #ddd;
+            border-bottom: 2px solid #333;
+            padding: 0;
+            text-align: center;
+            font-size: 9px;
+            font-weight: bold;
+            color: #333;
+            min-width: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Habit input cells */
+        .habit-input-cell {
+            position: sticky;
+            left: 0;
+            background: white;
+            border-right: 2px solid #333;
+            border-bottom: 1px solid #ddd;
+            padding: 4px 6px;
+            z-index: 2;
+        }
+
+        .habit-input {
+            width: 100%;
+            padding: 4px 3px;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            background: transparent;
+            color: #333;
+            text-align: left;
+        }
+
+        .habit-input:focus {
+            outline: none;
+            background: #f9f9f9;
+        }
+
+        /* Tracker cells */
+        .tracker-cell {
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 0;
+            text-align: center;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            min-width: 26px;
+            background: white;
+        }
+
+        .tracker-cell:hover {
+            background: #f9f9f9;
+        }
+
+        /* Alternating column backgrounds */
+        .tracker-cell:nth-child(4n+2) {
+            background: #fff9e6;
+        }
+
+        .tracker-cell:hover:nth-child(4n+2) {
+            background: #ffe680;
+        }
+
+        .checkbox {
+            width: 12px;
+            height: 12px;
+            border: 1.5px solid #333;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .checkbox.checked {
+            background: #333;
+        }
+
+        /* Bottom section */
+        .bottom-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            flex-grow: 1;
+            min-height: 0;
+        }
+
+        .section {
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section h3 {
+            font-weight: bold;
+            margin-bottom: 6px;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .section-content {
+            border: 1px solid #ddd;
+            padding: 8px;
+            flex-grow: 1;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+        }
+
+        @page {
+            size: A4 landscape;
+            margin: 10mm;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>HABIT TRACKER</h1>
+        </div>
+
+        <div class="content">
+            <div class="tracker-wrapper">
+                <div class="tracker" id="tracker"></div>
+            </div>
+
+            <div class="bottom-section">
+                <div class="section">
+                    <h3>NOTES:</h3>
+                    <div class="section-content"></div>
+                </div>
+                <div class="section">
+                    <h3>GOALS:</h3>
+                    <div class="section-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tracker = document.getElementById('tracker');
+        const numDays = 31;
+        const numHabits = 12;
+
+        function initTracker() {
+            tracker.innerHTML = '';
+
+            // Header row
+            const headerHabit = document.createElement('div');
+            headerHabit.className = 'habit-label';
+            headerHabit.textContent = 'HABIT';
+            tracker.appendChild(headerHabit);
+
+            for (let day = 1; day <= numDays; day++) {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'day-header';
+                dayHeader.textContent = day;
+                tracker.appendChild(dayHeader);
+            }
+
+            // Habit rows
+            for (let habit = 0; habit < numHabits; habit++) {
+                // Habit input
+                const habitInputCell = document.createElement('div');
+                habitInputCell.className = 'habit-input-cell';
+
+                const habitInput = document.createElement('input');
+                habitInput.type = 'text';
+                habitInput.className = 'habit-input';
+                habitInput.placeholder = '';
+                habitInput.dataset.habitIndex = habit;
+
+                habitInputCell.appendChild(habitInput);
+                tracker.appendChild(habitInputCell);
+
+                // Day cells
+                for (let day = 1; day <= numDays; day++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'tracker-cell';
+
+                    const checkbox = document.createElement('div');
+                    checkbox.className = 'checkbox';
+                    cell.appendChild(checkbox);
+
+                    const key = `tracker-${habit}-${day}`;
+                    if (localStorage.getItem(key) === 'true') {
+                        checkbox.classList.add('checked');
+                    }
+
+                    cell.addEventListener('click', () => {
+                        checkbox.classList.toggle('checked');
+                        localStorage.setItem(key, checkbox.classList.contains('checked'));
+                    });
+
+                    tracker.appendChild(cell);
+                }
+            }
+        }
+
+        initTracker();
+    </script>
+</body>
+</html>
