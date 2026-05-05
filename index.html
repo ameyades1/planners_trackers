@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Trackers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f1e8 0%, #faf8f3 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: #f4d76a;
+            padding: 30px 40px;
+            border-radius: 8px;
+            border-bottom: 3px solid #333;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 42px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #555;
+            letter-spacing: 0.5px;
+        }
+
+        /* Trackers Grid */
+        .trackers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .tracker-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tracker-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .tracker-card h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 12px;
+            border-bottom: 3px solid #f4d76a;
+            padding-bottom: 12px;
+        }
+
+        .tracker-card .subtitle {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .tracker-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 24px;
+            padding-left: 0;
+        }
+
+        .features li {
+            font-size: 13px;
+            color: #666;
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #f4d76a;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid #f4d76a;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #f4d76a;
+            color: #333;
+        }
+
+        .btn-primary:hover {
+            background: #e8c956;
+            border-color: #e8c956;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #f4d76a;
+        }
+
+        .btn-secondary:hover {
+            background: #f4d76a;
+            color: #333;
+        }
+
+        /* Info Section */
+        .info {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+
+        .info h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 16px;
+            border-left: 4px solid #f4d76a;
+            padding-left: 12px;
+        }
+
+        .info p {
+            font-size: 13px;
+            line-height: 1.7;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .print-settings {
+            background: #fff9e6;
+            padding: 16px;
+            border-radius: 4px;
+            margin-top: 16px;
+            border-left: 4px solid #f4d76a;
+        }
+
+        .print-settings h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .print-settings ul {
+            font-size: 12px;
+            color: #555;
+            margin-left: 16px;
+        }
+
+        .print-settings li {
+            margin-bottom: 4px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .footer a {
+            color: #f4d76a;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .trackers {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>HABIT TRACKERS</h1>
+            <p>Simple, printable habit tracking sheets for personal productivity</p>
+        </div>
+
+        <!-- Trackers -->
+        <div class="trackers">
+            <!-- Monthly Tracker -->
+            <div class="tracker-card">
+                <h2>Monthly Habit Tracker</h2>
+                <div class="subtitle">Track 12 habits over 31 days</div>
+                <p>Perfect for tracking your habits throughout the entire month. Great for long-term habit formation and monthly reviews.</p>
+
+                <ul class="features">
+                    <li>31-day grid (full month)</li>
+                    <li>12 customizable habits</li>
+                    <li>36px rows (~9mm) for comfortable writing</li>
+                    <li>Notes & Goals sections</li>
+                    <li>A4 landscape optimized</li>
+                </ul>
+
+                <div class="buttons">
+                    <a href="monthly_v1/monthly_habit_tracker.html" class="btn btn-primary">📱 Digital Version</a>
+                    <a href="monthly_v1/monthly_habit_tracker.pdf" class="btn btn-secondary">📄 Print PDF</a>
+                </div>
+            </div>
+
+            <!-- Weekly Tracker -->
+            <div class="tracker-card">
+                <h2>Weekly Habit Tracker</h2>
+                <div class="subtitle">Track 12 habits over 7 days</div>
+                <p>Perfect for detailed weekly planning and daily habit tracking. Print multiple copies for consecutive weeks or use as a supplement to monthly tracking.</p>
+
+                <ul class="features">
+                    <li>7-day grid (Monday-Sunday)</li>
+                    <li>12 customizable habits</li>
+                    <li>36px rows (~9mm) for comfortable writing</li>
+                    <li>Notes & Goals sections</li>
+                    <li>A4 landscape optimized</li>
+                </ul>
+
+                <div class="buttons">
+                    <a href="weekly_v1/weekly_habit_tracker.html" class="btn btn-primary">📱 Digital Version</a>
+                    <a href="weekly_v1/weekly_habit_tracker.pdf" class="btn btn-secondary">📄 Print PDF</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="info">
+            <h3>🖨️ How to Print</h3>
+            <p>Both trackers are optimized for A4 landscape printing:</p>
+
+            <div class="print-settings">
+                <h4>Printer Settings:</h4>
+                <ul>
+                    <li><strong>Paper size:</strong> A4</li>
+                    <li><strong>Orientation:</strong> Landscape</li>
+                    <li><strong>Margins:</strong> 0mm (none) — margins are built into the PDF</li>
+                    <li><strong>Scale:</strong> 100% (actual size)</li>
+                </ul>
+            </div>
+
+            <h3 style="margin-top: 24px;">💻 Digital Version</h3>
+            <p>Use the HTML files in your web browser:</p>
+            <ul style="margin-left: 16px; font-size: 13px; color: #555;">
+                <li>Type habit names in the leftmost column</li>
+                <li>Click checkbox squares to mark daily completions</li>
+                <li>Data persists in browser storage (no account needed)</li>
+                <li>Works on all modern browsers (Chrome, Firefox, Safari, Edge)</li>
+            </ul>
+
+            <h3 style="margin-top: 24px;">⚙️ Customization</h3>
+            <p>Both trackers are fully customizable. Edit the HTML files to:</p>
+            <ul style="margin-left: 16px; font-size: 13px; color: #555;">
+                <li>Change colors in the CSS section</li>
+                <li>Modify the number of habits</li>
+                <li>Adjust spacing and fonts</li>
+                <li>Add or remove sections</li>
+            </ul>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Made with ❤️ for habit tracking | <a href="https://github.com/ameyades1/planners_trackers">View on GitHub</a></p>
+            <p style="margin-top: 8px;">A4 Landscape | 10mm Margins | Print-Ready</p>
+        </div>
+    </div>
+</body>
+</html>
